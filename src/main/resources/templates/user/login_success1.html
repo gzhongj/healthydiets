@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆成功</title>
+		<link type="text/css" rel="stylesheet" href="/css/style.css">
+		<script type="text/javascript" href="/script/jquery-1.7.2.js"></script>
+		<style type="text/css">
+			h1 {
+				text-align: center;
+				margin-top: 200px;
+			}
+			h1 a {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="header">
+			<img class="logo_img" src="/img/logo.gif">
+			<div th:include="common/common::manager_head_nav"></div>
+		</div>
+
+		<div id="main">
+			<h1>欢迎回来 <a href="/food/page/1">转到主页</a></h1>
+		</div>
+
+		<div th:include="common/common::footer"></div>
+	</body>
+</html>

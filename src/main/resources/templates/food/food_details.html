@@ -1,0 +1,47 @@
+<!DOCTYPE>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>食谱详情</title>
+	<link type="text/css" rel="stylesheet" href="/css/style.css">
+	<script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+	<style type="text/css">
+	h1 {
+		text-align: center;
+		margin-top: 200px;
+	}
+	h1 a {
+		color:red;
+	}
+	input {
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+		<div id="header">
+			<img class="logo_img" alt="" src="/img/logo.gif" >
+			<span class="wel_word">食谱详情</span>
+			<div>
+				<!--        登录成功的情况 -->
+				<span th:if="${#session.getAttribute('user')!=null}">
+                    <span th:if="${#session.getAttribute('user').authority==0}">
+                        <span th:include="common/common::nomal_head_nav"></span>
+                    </span>
+                    <span th:if="${#session.getAttribute('user').authority==1}">
+                        <span th:include="common/common::manager_head_nav"></span>
+                    </span>
+                </span>
+			</div>
+		</div>
+		
+		<div id="main">
+			<div id="food_details">
+				<img style="display: table-cell" src="/img/details.png"/>
+			</div>
+
+		</div>
+		<!--    静态包含页脚内容-->
+		<div th:include="common/common::footer"></div>
+</body>
+</html>

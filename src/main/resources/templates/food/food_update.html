@@ -1,0 +1,58 @@
+<!DOCTYPE>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>编辑食谱</title>
+	<link type="text/css" rel="stylesheet" href="/css/style.css">
+	<script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+	<style type="text/css">
+	h1 {
+		text-align: center;
+		margin-top: 200px;
+	}
+	h1 a {
+		color:red;
+	}
+	input {
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+		<div id="header">
+			<img class="logo_img" alt="" src="/img/logo.gif" >
+			<span class="wel_word">更新食谱</span>
+			<div th:include="common/common::manager_head_nav"></div>
+		</div>
+		
+		<div id="main">
+			<form th:action="@{'/food/update/'+${food.id}}" enctype="multipart/form-data" method="post">
+				<table>
+					<tr>
+						<td>名称</td>
+						<td>价格</td>
+						<td>营养师</td>
+						<td>热量</td>
+						<td colspan="2">图片</td>
+					</tr>		
+					<tr>
+						<td><input name="name" type="text" th:value="${food.name}"/></td>
+						<td><input name="price" type="text" th:value="${food.price}"/></td>
+						<td><input name="chef" type="text" th:value="${food.chef}"/></td>
+						<td><input name="energy" type="text" th:value="${food.energy}"/></td>
+						<td colspan="2"><input name="imgfile" type="file" th:value="${food.imgPath}"/></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td colspan="2"><input type="submit" value="提交"/></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<!--    静态包含页脚内容-->
+		<div th:include="common/common::footer"></div>
+</body>
+</html>

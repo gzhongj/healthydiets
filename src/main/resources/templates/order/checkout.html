@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>结算页面</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+        <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+        <style type="text/css">
+            h1 {
+                text-align: center;
+                margin-top: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+    <img class="logo_img" src="/img/logo.gif">
+    <span class="wel_word">订单结算</span>
+    <div>
+        <!--        没有登录的情况 -->
+        <span th:if="${#session.getAttribute('user')==null}">
+                    <a href="/">登录</a>&nbsp;|
+                    <a href="/user/register.html">注册</a>&nbsp;&nbsp;
+        </span>
+
+        <!--        登录成功的情况 -->
+        <span th:if="${#session.getAttribute('user')!=null}">
+            <span th:if="${#session.getAttribute('user').authority==0}">
+                        <span th:include="common/common::nomal_head_nav"></span>
+            </span>
+            <span th:if="${#session.getAttribute('user').authority==1}">
+                        <span th:include="common/common::manager_head_nav"></span>
+            </span>
+        </span>
+    </div>
+</div>
+        <div id="main">
+    <div id="cartemptymsg">
+        <p style="font-size: 18px;">你的订单已结算，订单号为[[${#session.getAttribute('order').orderId}]]</p>
+        <table>
+            <tr>
+                <td>商品名称</td>
+                <td>数量</td>
+                <td>单价</td>
+                <td>金额</td>
+            </tr>
+            <tr th:each="item:${#session.getAttribute('orderItems')}">
+                <td>[[${item.name}]]</td>
+                <td>[[${item.count}]]</td>
+                <td>[[${item.singlePrice}]]</td>
+                <td>[[${item.totalPrice}]]</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span class="cart_span">
+                        总金额:&nbsp
+                        <span>
+                            [[${#session.getAttribute('order').price}]]
+                        </span>
+                        &nbsp元
+                    </span>
+                </td>
+                <td colspan="2">
+                    <a href="#">支付订单</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+        <!--    静态包含页脚内容-->
+        <div th:include="common/common::footer"></div>
+    </body>
+</html>

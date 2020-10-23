@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    username: root
+    password: gzj1112
+    url: jdbc:mysql://localhost:3306/healthydiets
+  thymeleaf:
+    cache: false
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+server:
+  port: 80
+

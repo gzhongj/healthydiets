@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>销量榜单</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+        <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+    </head>
+    <body>
+        <!--导航栏显示-->
+        <div id="header">
+            <span class="wel_word">
+                <img src="/img/logo.gif">
+                销量榜单
+            </span>
+            <div>
+                <!--                &lt;!&ndash;        没有登录的情况 &ndash;&gt;-->
+                <!--                <span th:if="${#session.getAttribute('user')==null}">-->
+                <!--                    <a href="/">登录</a>&nbsp;|-->
+                <!--                    <a href="/user/register.html">注册</a>&nbsp;&nbsp;-->
+                <!--                </span>-->
+
+                <!--        登录成功的情况 -->
+                <span th:if="${#session.getAttribute('user')!=null}">
+                    <span th:if="${#session.getAttribute('user').authority==0}">
+                        <span th:include="common/common::nomal_head_nav"></span>
+                    </span>
+                    <span th:if="${#session.getAttribute('user').authority==1}">
+                        <span th:include="common/common::manager_head_nav"></span>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <!--主体内容显示-->
+        <div id="main">
+            <!--商品信息展示-->
+            <div id="food">
+                <!--  2-食谱信息展示-->
+                <div th:each="food:${#session.getAttribute('foods')}">
+                    <div class="b_list">
+                        <div class="img_div">
+                            <img class="food_img" th:src="@{${food.imgPath}}"/>
+                        </div>
+                        <div class="food_info">
+                            <div class="food_name">
+                                <span class="sp1">&nbsp&nbsp食&nbsp&nbsp&nbsp谱:&nbsp</span>
+                                <span class="sp2" th:text="${food.name}"></span>
+                            </div>
+                            <div class="food_author">
+                                <span class="sp1">&nbsp&nbsp营养师:&nbsp</span>
+                                <span class="sp2" th:text="${food.chef}"></span>
+                            </div>
+                            <div class="food_price">
+                                <span class="sp1">&nbsp&nbsp价&nbsp&nbsp&nbsp格:&nbsp</span>
+                                <span class="sp2" th:text="${food.price}"></span>
+                            </div>
+                            <div class="food_sales">
+                                <span class="sp1">&nbsp&nbsp销&nbsp&nbsp&nbsp量:&nbsp</span>
+                                <span class="sp2" th:text="${food.sales}"></span>
+                            </div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--    静态包含页脚内容-->
+        <div th:include="common/common::footer"></div>
+    </body>
+</html>

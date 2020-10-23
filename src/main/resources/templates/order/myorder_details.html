@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#delete_order_msg").click(function () {
+                var orderId = $("#delete_order_msg").attr("order_id");
+                return confirm("您确定要删除订单" + orderId + "吗？");
+            })
+        })
+    </script>
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            margin-top: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img class="logo_img" src="/img/logo.gif">
+        <span class="wel_word">我的订单</span>
+        <div th:include="common/common::nomal_head_nav"></div>
+    </div>
+    <div id="main">
+        <table>
+            <tr>
+                <td>商品名称</td>
+                <td>数量</td>
+                <td>单价</td>
+                <td>金额</td>
+                <td>订单状态</td>
+            </tr>
+            <tr th:each="item:${orderItems}">
+                <td>[[${item.name}]]</td>
+                <td>[[${item.count}]]</td>
+                <td>[[${item.singlePrice}]]</td>
+                <td>[[${item.totalPrice}]]</td>
+                <td th:switch="${status}">
+                    <span th:case="${0}">未发货</span>
+                    <span th:case="${1}">已发货</span>
+                    <span th:case="${2}">送货中</span>
+                    <span th:case="${3}">订单完成</span>
+                    <span th:case="${4}">订单取消</span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <span class="cart_span">
+                        总金额:&nbsp<span>[[${price}]]</span>&nbsp元
+                    </span>
+                </td>
+                <td>
+                    <a href="/order/myorder_manager.html">返回</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <!--    静态包含页脚内容-->
+    <div th:include="common/common::footer"></div>
+</body>
+</html>

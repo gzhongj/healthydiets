@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>客户端错误</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+        <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+
+    </head>
+    <body>
+        <!--导航栏显示-->
+        <div id="header">
+            <span class="wel_word">
+                <img src="/img/logo.gif">
+                生活助手
+            </span>
+            <div>
+                <!--        登录成功的情况 -->
+                <span th:if="${#session.getAttribute('user')!=null}">
+                    <span th:if="${#session.getAttribute('user').authority==0}">
+                        <span th:include="common/common::nomal_head_nav"></span>
+                    </span>
+                    <span th:if="${#session.getAttribute('user').authority==1}">
+                        <span th:include="common/common::manager_head_nav"></span>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <!--主体内容显示-->
+        <div id="main">
+            <div id="cartemptymsg">
+                <h1>没有找到您需要的资源，换种方式试一试!!!</h1>
+            </div>
+        </div>
+        <!--    静态包含页脚内容-->
+        <div th:include="common/common::footer"></div>
+    </body>
+</html>

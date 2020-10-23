@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+    <meta charset="UTF-8">
+    <title>食谱管理</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            // <%-- 删除确认 --%>
+            $("a.deletemsg").click(function () {
+                return confirm("您确定要删除【" + $(this).parent().parent().find("td:first").text() + "】吗？")
+            })
+            // <%-- 跳转到指定页面 --%>
+            $("#searchPage").click(function () {
+                var pageNo = $("#pn_input").val();
+                location.href = "<%=basePath%>" + "manager/foodServlet?action=page&pageNo=" + pageNo;
+            })
+        })
+    </script>
+    </head>
+    <body>
+        <div id="header">
+    <img class="logo_img" src="/img/logo.gif">
+    <span class="wel_word">食谱管理系统</span>
+    <div th:include="common/common::manager_head_nav"></div>
+</div>
+        <div id="main">
+        <table>
+        <tr>
+            <td>名称</td>
+            <td>价格</td>
+            <td>营养师</td>
+            <td>热量</td>
+            <td colspan="2">操作</td>
+        </tr>
+        <tr th:each="food:${#session.getAttribute('foods')}">
+            <td>[[${food.name}]]</td>
+            <td>[[${food.price}]]</td>
+            <td>[[${food.chef}]]</td>
+            <td>[[${food.energy}]]</td>
+            <td><a th:href="@{'/food/get/'+${food.id}}">修改</a></td>
+            <td><a class="deletemsg" th:href="@{'/food/delete/'+${food.id}}">删除</a></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="/food/get/0">添加食谱</a></td>
+        </tr>
+    </table>
+        <br>
+        <!--   分页内容-->
+        <div th:fragment="page_nav">
+        <div id="page_nav">
+            <a th:href="@{'/food/manager/1'}">首页</a>
+            <a th:href="@{'/food/manager/'+${#session.getAttribute('pageNo')-1}}"
+               th:if="${#session.getAttribute('pageNo')>1}">上一页</a>
+            第<span>[[${#session.getAttribute('pageNo')}]]</span>页
+            <a th:href="@{'/food/manager/'+${#session.getAttribute('pageNo')+1}}"
+               th:if="${#session.getAttribute('pageNo')<#session.getAttribute('pageTotal')}">下一页</a>
+            <a th:href="@{'/food/manager/'+${#session.getAttribute('pageTotal')}}">末页</a>
+        </div>
+    </div>
+        <br>
+        </div>
+        <!--    静态包含页脚内容-->
+        <div th:include="common/common::footer"></div>
+</body>
+</html>

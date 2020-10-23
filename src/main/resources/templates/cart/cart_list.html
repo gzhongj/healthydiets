@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>购物车</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+        <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                // <%--为删除商品操作 添加 单击事件，提醒用户是否确认删除商品 --%>
+                $("a.deletemsg").click(function () {
+                    return confirm("您确定要删除【" + $(this).parent().parent().find("td:first").text() + "】吗？")
+                })
+                // <%--为清空购物车操作 添加 单击事件，提醒用户是否确认清空 --%>
+                $("a.clearmsg").click(function () {
+                    return confirm("您确定要清空购物车吗？")
+                })
+                // <%--为修改商品数量操作 添加 onchange事件，提醒用户是否确认修改 --%>
+                $("input.updatecount").change(function () {
+                    var name = $(this).parent().parent().find("td:first").text();
+                    var count = this.value;
+                    var foodId = $(this).attr("food_id");
+                    if (confirm("您确定将【" + name + "】的数量修改为 " + count + " 吗？")) {
+                        location.href = "/cart/update/"+foodId+"/"+count;
+                    } else {
+                        this.value = this.defaultValue;
+                    }
+                })
+            })
+        </script>
+    </head>
+    <body>
+    <div id="header">
+        <span class="wel_word">
+            <img src="/img/logo.gif">
+            购物车
+        </span>
+        <div>
+            <!--        没有登录的情况 -->
+            <span th:if="${#session.getAttribute('user')==null}">
+                <a href="/">登录</a>&nbsp;|
+                <a href="/user/register.html">注册</a>&nbsp;&nbsp;
+                <a href="/food/page/1">返回首页</a>
+            </span>
+            <!--        登录成功的情况 -->
+            <span th:if="${#session.getAttribute('user')!=null}">
+                <span th:if="${#session.getAttribute('user').authority==0}">
+                    <span th:include="common/common::nomal_head_nav"></span>
+                </span>
+                <span th:if="${#session.getAttribute('user').authority==1}">
+                    <span th:include="common/common::manager_head_nav"></span>
+                </span>
+            </span>
+        </div>
+    </div>
+    <div id="main">
+        <!--    购物车商品展示-->
+        <table th:if="${#session.getAttribute('cart')!=null}">
+                <tr th:if="${#session.getAttribute('cart').itemTotalCount!=0}">
+                    <td>商品名称</td>
+                    <td>数量</td>
+                    <td>单价</td>
+                    <td>总金额</td>
+                    <td>操作</td>
+                </tr>
+                <tr th:if="${#session.getAttribute('cart').itemTotalCount!=0}"
+                    th:each="item:${#session.getAttribute('cart').items}">
+                    <td>[[${item.value.name}]]</td>
+                    <td>
+                        <input type="text" class="updatecount"
+                               th:value="${item.value.count}"
+                               th:attr="food_id=${item.value.id}"
+                               style="width: 30px;text-align: center">
+                    </td>
+                    <td>[[${item.value.singlePrice}]]</td>
+                    <td>[[${item.value.totalPrice}]]</td>
+                    <td><a class="deletemsg" th:href="@{'/cart/delete/'+${item.value.id}}">删除</a></td>
+                </tr>
+                <tr th:if="${#session.getAttribute('cart').itemTotalCount!=0}">
+                    <td colspan="5">
+                        <!--    购物车结算信息和操作-->
+                        <span class="cart_info" >
+                        <span class="cart_span">购物车中共有<span class="b_count">[[${#session.getAttribute('cart').itemTotalCount}]]</span>件商品</span>
+                        <span class="cart_span">总金额<span class="b_price">[[${#session.getAttribute('cart').itemTotalPrice}]]</span>元</span>
+                        <span class="cart_span"><a class="clearmsg" href="/cart/clear">清空购物车</a></span>
+                        <span class="cart_span"><a th:href="@{'/order/create'}">确认购买</a></span>
+                        </span>
+                    </td>
+                </tr>
+                <!--        购物车为空-->
+            <div id="cartemptymsg" th:if="${#session.getAttribute('cart').itemTotalCount==0}">
+                <h1 style="font-size: 24px;">亲，您的购物车里什么都没有！</h1>
+                <br>
+                <a href="/food/page/1">快去浏览商品吧>>></a>
+            </div>
+            </table>
+        <div id="cartemptymsg" th:if="${#session.getAttribute('cart')==null}">
+            <h1 style="font-size: 24px;">亲，您的购物车里什么都没有！</h1>
+            <br>
+            <a href="/food/page/1">快去浏览商品吧</a>
+        </div>
+    </div>
+    <!--    静态包含页脚内容-->
+    <div th:include="common/common::footer"></div>
+    </body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>首页</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+        <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                // <%-- 给 input-页码 绑定单击事件，跳转到指定页面 --%>
+                $("#searchPage").click(function () {
+                    var pageNo = $("#pn_input").val();
+                    location.href = "/food/page/" + pageNo;
+                })
+                // <%-- 给加入购物车 botton-按钮 绑定单击事件 --%>
+                $("button.addtocart").click(function () {
+                    var foodId = $(this).attr("food_id");
+                    $.getJSON("/cart/add", "foodId=" + foodId, function (data) {
+                        $("#last_name").text("您已将《" + data.lastName + "》加入购物车，");
+                        $("#cart_total_count").text("目前共有 " + data.itemTotalCount + " 件商品！");
+                        $("#empty_msg").css('display','none');
+                        $("#tocart").css('display', 'inline');
+
+                    })
+                })
+                $("button.details").click(function () {
+                    var foodId = $(this).attr("food_id");
+                    location.href = "/food/details";
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <!--导航栏显示-->
+        <div id="header">
+            <span class="wel_word">
+                <img src="/img/logo.gif">
+                生活助手
+            </span>
+            <div>
+                <!--        登录成功的情况 -->
+                <span th:if="${#session.getAttribute('user')!=null}">
+                    <span th:if="${#session.getAttribute('user').authority==0}">
+                        <span th:include="common/common::nomal_head_nav"></span>
+                    </span>
+                    <span th:if="${#session.getAttribute('user').authority==1}">
+                        <span th:include="common/common::manager_head_nav"></span>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <!--主体内容显示-->
+        <div id="main">
+            <!--商品信息展示-->
+            <div id="food">
+                <!--  2-食谱信息展示-->
+                <div th:each="food:${#session.getAttribute('page').items}">
+                    <div class="b_list">
+                        <div class="img_div">
+                            <img class="food_img"  th:src="@{${food.imgPath}}"/>
+                        </div>
+                        <div class="food_info">
+                            <div class="food_name">
+                                <span class="sp1">&nbsp&nbsp食&nbsp&nbsp&nbsp谱:&nbsp</span>
+                                <span class="sp2" th:text="${food.name}"></span>
+                            </div>
+                            <div class="food_author">
+                                <span class="sp1">&nbsp&nbsp营养师:&nbsp</span>
+                                <span class="sp2" th:text="${food.chef}"></span>
+                            </div>
+                            <div class="food_price">
+                                <span class="sp1">&nbsp&nbsp价&nbsp&nbsp&nbsp格:&nbsp</span>
+                                <span class="sp2" th:text="${food.price}"></span>
+                            </div>
+                            <div class="food_sales">
+                                <span class="sp1">&nbsp&nbsp销&nbsp&nbsp&nbsp量:&nbsp</span>
+                                <span class="sp2" th:text="${food.sales}"></span>
+                            </div>
+                            <div></div>
+                            <div>
+                                <span class="food_add">&nbsp
+                                <button class="addtocart"  th:attr="food_id=${food.id}">加入购物车</button>
+                                </span>
+                                <span class="food_add">&nbsp
+                                <button class="details" th:attr="food_id=${food.id}" >详情</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              <!--    主页回显购物车的信息-->
+            <div style="text-align: center">
+                <span id="empty_msg" th:if="${#session.getAttribute('cart')==null}">
+                    购物车是空的，看看
+                    <a href="/food/rank" style="color: firebrick">销量榜单</a>吧！
+                </span>
+                <span id="cartLastName_refresh">
+                    <span id="last_name"></span>
+                    <span id="cart_total_count"></span>
+                </span>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <a style="color: cornflowerblue" href="/cart/cart_list.html">>>进入购物车</a>
+            </div>
+        <!--    静态页面 分页内容-->
+            <div th:include="common/common::page_nav"></div>
+        </div>
+        <!--    静态包含页脚内容-->
+        <div th:include="common/common::footer"></div>
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>common</title>
+        <link type="text/css" rel="stylesheet" href="/css/style.css">
+        <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+    </head>
+    <body>
+        <div th:fragment="nomal_head_nav">
+            <span>欢迎光临</span><span class="header_nav" th:text="${#session.getAttribute('user').username}"></span>
+            &nbsp;&nbsp;
+            <a href="/order/showOrders">我的订单</a>&nbsp;|
+            <a href="/food/page/1">返回首页</a>&nbsp;|
+            <a href="/user/logout">注销</a>&nbsp;&nbsp;
+        </div>
+
+        <div th:fragment="manager_head_nav">
+            <span>欢迎光临</span><span class="header_nav" th:text="${#session.getAttribute('user').username}"></span>
+            <a href="/food/manager/1">食谱管理</a>
+            <a href="/order/showAllOrders">订单管理</a>
+            <a href="/food/page/1">返回首页</a>
+            <a href="/user/logout">注销</a>&nbsp;&nbsp;
+        </div>
+
+        <div  th:fragment="page_nav" >
+            <div id="page_nav">
+                <a th:href="@{'/food/page/1'}">首页</a>
+                <a th:href="@{'/food/page/'+${#session.getAttribute('pageNo')-1}}" th:if="${#session.getAttribute('pageNo')>1}">上一页</a>
+                第<span>[[${#session.getAttribute('pageNo')}]]</span>页
+                <a th:href="@{'/food/page/'+${#session.getAttribute('pageNo')+1}}" th:if="${#session.getAttribute('pageNo')<#session.getAttribute('pageTotal')}">下一页</a>
+                <a th:href="@{'/food/page/'+${#session.getAttribute('pageTotal')}}">末页</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                共<span>[[${#session.getAttribute('pageTotal')}]]</span>页，
+                <span>[[${#session.getAttribute('pageTotalCount')}]]</span>条记录
+            </div>
+
+        </div>
+        <div th:fragment="footer">
+            <div id="bottom" >
+                    <span>
+                        吃点啥生活助手.Copyright &copy;2020
+                    </span>
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+    <meta charset="UTF-8">
+    <title>订单管理</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css">
+    <script type="text/javascript" src="/script/jquery-1.7.2.js"></script>
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            margin-top: 200px;
+        }
+    </style>
+</head>
+    <body>
+        <div id="header">
+            <img class="logo_img" alt="" src="./img/logo.gif">
+            <span class="wel_word">订单管理</span>
+            <div th:include="common/common::manager_head_nav"></div>
+        </div>
+        <div id="main">
+        <!-- 没有订单-->
+            <div id="cartemptymsg" th:if="${#lists.isEmpty(session.orders)}">
+                    <h1 style="font-size: 24px;">暂时没有用户下单</h1>
+            </div>
+        <!-- 有订单 -->
+            <table th:unless="${#lists.isEmpty(session.orders)}">
+                <tr>
+                    <td>用户ID</td>
+                    <td>订单编号</td>
+                    <td>日期</td>
+                    <td>金额</td>
+                    <td>状态</td>
+                    <td>详情</td>
+                </tr>
+                <tr th:each="order:${#session.getAttribute('orders')}">
+                    <td>[[${order.userId}]]</td>
+                    <td>[[${order.orderId}]]</td>
+                    <td th:text="${#calendars.format(order.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                    <td>[[${order.price}]]</td>
+                    <td th:switch="${order.status}">
+                        <span th:case="${0}">
+                            <a th:href="@{'/order/updateOrderStatus/0/'+${order.orderId}}">发货</a>
+                        </span>
+                        <span th:case="${1}">
+                            <a th:href="@{'/order/updateOrderStatus/1/'+${order.orderId}}">已发货</a>
+                        </span>
+                        <span th:case="${2}">送货中</span>
+                        <span th:case="${3}">订单完成</span>
+                        <span th:case="${4}">订单取消</span>
+                    </td>
+                    <td><a th:href="@{'/order/orderDetails/'+${order.orderId}}">查看详情</a></td>
+                </tr>
+            </table>
+        </div>
+        <!--    静态包含页脚内容-->
+        <div th:include="common/common::footer"></div>
+    </body>
+</html>
